@@ -237,6 +237,7 @@ button {
 }
 
 .winning-screen {
+  display: none;
   position: absolute;
   text-align: center;
   bottom: 50%;
