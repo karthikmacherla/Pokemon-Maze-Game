@@ -14,5 +14,5 @@ The goal is simply to reach the other flag from your current location. At the en
 games, feel free to save and create your own!
 
 
-![alt text](./pics/samplepics.png)
+# ![alt text](pics/samplepic.png)
 
