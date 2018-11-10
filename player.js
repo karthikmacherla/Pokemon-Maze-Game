@@ -37,8 +37,9 @@ var Player = function (x, y, builder) {
   this.update = function () {
     $('.map').append(this.player);
     this.player.css({left: this.x*SWATCH_SIZE, top: this.y* SWATCH_SIZE})
-  } 
 
+  }
+  
   this.bindHandlers = function () {
     var obj = this;
     $(document).on('keydown', function (e) {
@@ -48,26 +49,60 @@ var Player = function (x, y, builder) {
       if (e.which == LEFT) {
         let orient = obj.player.attr('class');
         obj.player.removeClass(orient).addClass('player facing-left');
-        if (obj.x != 0 && isValid(obj.x -1, obj.y)) obj.x--;
+        if (obj.x != 0 && isValid(obj.x -1, obj.y)) {
+          obj.x--;
+        }
       }
       if (e.which == UP) {
         let orient = obj.player.attr('class');
         obj.player.removeClass(orient).addClass('player facing-up');
-        if (obj.y != 0 && isValid(obj.x, obj.y-1)) obj.y--;
+        if (obj.y != 0 && isValid(obj.x, obj.y-1)) {
+          obj.y--;
+        }
       }
       if (e.which == RIGHT) {
         let orient = obj.player.attr('class');
         obj.player.removeClass(orient).addClass('player facing-right');
-        if (obj.x != builder.width-1 && isValid(obj.x +1, obj.y)) obj.x++;
+        if (obj.x != builder.width-1 && isValid(obj.x +1, obj.y)) { 
+          obj.x++;
+        }
       }
       if (e.which == DOWN) {
         let orient = obj.player.attr('class');
         obj.player.removeClass(orient).addClass('player facing-down');
-        if(obj.y != builder.height-1 && isValid(obj.x, obj.y+1)) obj.y++;
+        if(obj.y != builder.height-1 && isValid(obj.x, obj.y+1) ) {
+          obj.y++;
+        }
       }
-      (obj.player).css({left: obj.x*SWATCH_SIZE, top: obj.y* SWATCH_SIZE});
+      (obj.player).css({left: obj.x*SWATCH_SIZE, top: (obj.y) * SWATCH_SIZE});
     });
   }
+
+  this.bindGameHandlers = function() {
+    var obj = this;
+    $(document).on('keydown', function (e) {
+      if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+      }
+      if (e.which == LEFT) {
+        if (winningCase(obj.x - 1, obj.y))
+          $('.winning-screen').show();
+      }
+      if (e.which == UP) {
+        if(winningCase(obj.x, obj.y-1))
+          $('.winning-screen').show();
+      }
+      if (e.which == RIGHT) {
+        if(winningCase(obj.x + 1, obj.y))
+          $('.winning-screen').show();
+      }
+      if (e.which == DOWN) {
+        if(winningCase(obj.x, obj.y+1))
+         $('.winning-screen').show();
+      }
+  });
+  }
+
 };
 
 
@@ -79,10 +114,17 @@ var isValid = function (x, y) {
   '.weed-4x, .weed-small, .weed-2x, .sand-patch, .field, .plateau, .sand-n, .sand-w, .sand-e, .sand-s, .sand-nw, .sand-ne,' +
   '.sand-se, .sand-sw, .sand-nw-inverse, .sand-ne-inverse, .sand-sw-inverse, .sand-se-inverse';
   let ans = ($(elem).is(walk_list));
+  console.log($(elem).attr("class").split(' '));
   return ans; 
 }
 
-
+var winningCase = function (x, y) {
+  let $rows = $('.row');
+  let $cols = $($rows[y]).children();       //when you extract an object from the array (jQuery obj)
+  let elem = $cols[x];
+  let ans = $(elem).is('.sign');
+  return ans;
+}
 
 
 

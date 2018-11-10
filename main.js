@@ -4,12 +4,13 @@
 
 $(document).ready(function () {
   var $mapElement = $('#map-builder');
-  var builder = new MapBuilder($mapElement);
+  var builder = new MapBuilder($mapElement, {state: 'DRAW'});
   builder.setupPalette();
   builder.setupMapCanvas();
-  var pikachu = new Player(0, 0, builder);
+  var pikachu = new Player(0, 0, {$elem: $('.map'), height: 18, width: 55});
   pikachu.update();
   pikachu.bindHandlers();
-
+  if (builder.state == 'GAME') 
+  	pikachu.bindGameHandlers();
 });
 
